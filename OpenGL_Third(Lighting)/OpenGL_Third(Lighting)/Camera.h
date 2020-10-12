@@ -8,8 +8,8 @@
 
 enum Camera_Movement
 {
-	FRORWARD,
-	BACKWORD,
+	FORWARD,
+	BACKWARD,
 	LEFT,
 	RIGHT
 };

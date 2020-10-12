@@ -23,14 +23,14 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float y
 
 glm::mat4 Camera::GetViewMatrix()
 {
-    return glm::lookAt(Position, Position + Front, Up);
+    return glm::lookAt(Position, Position + Front, Up);`
 }
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {
     float velocity = MovementSpeed * deltaTime;
-    if (direction == FRORWARD) Position += Front * velocity;
-    if (direction == BACKWORD) Position -= Front * velocity;
+    if (direction == FORWARD) Position += Front * velocity;
+    if (direction == BACKWARD) Position -= Front * velocity;
     if (direction == LEFT) Position -= Right * velocity;
     if (direction == RIGHT) Position += Right * velocity;
 }
