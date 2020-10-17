@@ -1,6 +1,10 @@
 ﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,9 +16,10 @@
 #include "Shader.h"
 #include "GameTIme.h"
 
-using namespace std;
+using namespace std;    
 
 #pragma comment(lib, "glfw3.lib")
+#pragma comment(lib, "assimp-vc142-mt.lib")   
 
 //callback
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -83,7 +88,8 @@ int main()
 	//==========================
     glEnable(GL_DEPTH_TEST);
 
-   
+    Assimp::Importer importer;
+
     Shader lightingShader("Shader/Multiple_light.vs", "Shader/Multiple_light.fs");
 	Shader lightCubeShader("Shader/light_cube.vs", "Shader/light_cube.fs");
 
