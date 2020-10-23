@@ -1,10 +1,6 @@
 ﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -15,6 +11,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "GameTIme.h"
+#include "Model.h"
 
 using namespace std;    
 
@@ -92,6 +89,11 @@ int main()
 
     Shader lightingShader("Shader/Multiple_light.vs", "Shader/Multiple_light.fs");
 	Shader lightCubeShader("Shader/light_cube.vs", "Shader/light_cube.fs");
+    Shader ourShader("Shader/model_loading.vs","Shader/model_loading.fs");
+    
+    //Model ourModel("Skull/12140_Skull_v3_L2.obj");
+    Model ourModel("Sour Miku - Blue&Red/test/White.pmx");
+    //Model ourModel("backpack/backpack.obj");
 
     //cube vertex
     float vertices[] = {
@@ -283,6 +285,17 @@ int main()
             lightCubeShader.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+
+        ourShader.use();
+        ourShader.setMat4("projection", projection);
+        ourShader.setMat4("view", view);
+
+        glm::mat4 model = glm::mat4(1.0);
+        model = glm::translate(model, glm::vec3(0.0f ,0.0f ,0.0f));
+        //model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+        ourShader.setMat4("model", model);
+        ourModel.Draw(ourShader);
 
         gametime.DeltaTime_Update();
         glfwSwapBuffers(window);
