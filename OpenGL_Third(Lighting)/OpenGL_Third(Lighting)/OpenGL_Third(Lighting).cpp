@@ -17,6 +17,7 @@ using namespace std;
 
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "assimp-vc142-mt.lib")   
+#pragma comment(lib, "freetype.lib")
 
 //callback
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -92,8 +93,9 @@ int main()
     Shader ourShader("Shader/model_loading.vs","Shader/model_loading.fs");
     
     //Model ourModel("Skull/12140_Skull_v3_L2.obj");
-    Model ourModel("Sour Miku - Blue&Red/test/White.pmx");
+    //Model ourModel("Sour Miku - Blue&Red/test/White.pmx");
     //Model ourModel("backpack/backpack.obj");
+    Model ourModel("newell_teaset/teapot.obj");
 
     //cube vertex
     float vertices[] = {
@@ -194,12 +196,13 @@ int main()
     //============
     lightingShader.use();
     lightingShader.setInt("material.diffuse", 0);
-
+    
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
-  
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
         gametime.Time_Measure();
         // render
         // ------
@@ -286,14 +289,17 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
         ourShader.use();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
         glm::mat4 model = glm::mat4(1.0);
-        model = glm::translate(model, glm::vec3(0.0f ,0.0f ,0.0f));
-        //model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-        model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+        model = glm::translate(model, glm::vec3(0.0f ,-0.5f ,0.0f));
+        model = glm::rotate(model, (float)glfwGetTime()* glm::radians(180.0f),glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+        //model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
         ourShader.setMat4("model", model);
         ourModel.Draw(ourShader);
 
