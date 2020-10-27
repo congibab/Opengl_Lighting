@@ -23,10 +23,12 @@ struct Character
 class Text
 {
 private:
+	Shader font;
+
 	std::map<char, Character> Characters;
 	unsigned int VAO, VBO;
 public:
 	Text(const char* fontPath);
-	void Draw(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color);
+	void Draw(std::string text, float x, float y, float scale, glm::vec3 color);
 };
 
