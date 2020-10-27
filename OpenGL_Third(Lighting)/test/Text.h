@@ -24,12 +24,10 @@ class Text
 {
 private:
 
-	std::map<char, Character> Characters;
+	std::map<GLchar, Character> Characters;
 	unsigned int VAO, VBO;
 public:
 	Text(const char* fontPath);
-	void Draw(Shader &shader , std::string text, float x, float y, float scale, glm::vec3 color);
-	void Draw(Shader& shader, float textF, float x, float y, float scale, glm::vec3 color);
-
+	void Draw(Shader &shader ,std::string text, float x, float y, float scale, glm::vec3 color);
 };
 
