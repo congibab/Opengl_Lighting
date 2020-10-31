@@ -104,7 +104,7 @@ int main()
     Model ourModel("newell_teaset/teapot.obj");
 
     Shader shader("Shader/font.vs", "Shader/font.fs");
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(SCR_WIDTH), 0.0f, static_cast<float>(SCR_HEIGHT));
+    glm::mat4 projection = glm::ortho(0.0f, (float)SCR_WIDTH, 0.0f, (float)SCR_HEIGHT);
     shader.use();
     glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     Text text("font/BIZ-UDGothicB.ttc");
@@ -315,6 +315,7 @@ int main()
         model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
         //model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
         ourShader.setMat4("model", model);
+        ourShader.setFloat("Color", glfwGetTime());
         ourModel.Draw(ourShader);
         
 
