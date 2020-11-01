@@ -172,7 +172,7 @@ int main()
 
     glm::vec3 pointLightPositions[] =
     {
-        glm::vec3(0.7f,  0.2f,  2.0f),
+        glm::vec3(0.0f,  0.0f,  0.0f),
         glm::vec3(2.3f, -3.3f, -4.0f),
         glm::vec3(-4.0f,  2.0f, -12.0f),
         glm::vec3(0.0f,  0.0f, -3.0f)
@@ -282,6 +282,8 @@ int main()
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 3.0f, 0.5f));
+            model = glm::scale(model, glm::vec3(2.0f));
+
             lightingShader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -298,7 +300,7 @@ int main()
         {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, pointLightPositions[i]);
-            model = glm::scale(model, glm::vec3(0.2f));
+            model = glm::scale(model, glm::vec3(1.0f));
             lightCubeShader.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
@@ -316,7 +318,7 @@ int main()
         //model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
         ourShader.setMat4("model", model);
         ourShader.setFloat("Color", glfwGetTime());
-        ourModel.Draw(ourShader);
+        //ourModel.Draw(ourShader);
         
 
         text.Draw(shader,"This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
