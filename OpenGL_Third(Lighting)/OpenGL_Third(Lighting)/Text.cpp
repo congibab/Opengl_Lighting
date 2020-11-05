@@ -85,7 +85,15 @@ Text::Text(const char* fontPath)
 
 	//=====================================
 }
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="shader"></param>
+/// <param name="text">text contants</param>
+/// <param name="x"> postion x</param>
+/// <param name="y"> postion xy/param>
+/// <param name="scale"></param>
+/// <param name="color"></param>
 void Text::Draw(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color)
 {
 	shader.use();

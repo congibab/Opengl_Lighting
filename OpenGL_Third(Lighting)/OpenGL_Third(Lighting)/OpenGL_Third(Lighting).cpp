@@ -1,4 +1,11 @@
-﻿#include <glad/glad.h>
+﻿//====================================
+//====================================
+//参考したサイト
+//https://learnopengl.com/
+//https://heinleinsgame.tistory.com/3
+//====================================
+
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
 
@@ -15,7 +22,7 @@
 #include "Model.h"
 #include "Text.h"
 
-using namespace std;    
+using namespace std;
 
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "assimp-vc142-mt.lib")   
@@ -74,20 +81,20 @@ int main()
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
-    }    
+    }
 
 
 
-	//callback setup
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetKeyCallback(window, key_callback);
-	glfwSetCursorPosCallback(window, cursor_position_callback);
-	glfwSetScrollCallback(window, scroll_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
+    //callback setup
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//==========================
+    //==========================
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -95,9 +102,9 @@ int main()
     Assimp::Importer importer;
 
     Shader lightingShader("Shader/Multiple_light.vs", "Shader/Multiple_light.fs");
-	Shader lightCubeShader("Shader/light_cube.vs", "Shader/light_cube.fs");
-    Shader ourShader("Shader/model_loading.vs","Shader/model_loading.fs");
-    
+    Shader lightCubeShader("Shader/light_cube.vs", "Shader/light_cube.fs");
+    Shader ourShader("Shader/model_loading.vs", "Shader/model_loading.fs");
+
     //Model ourModel("Skull/12140_Skull_v3_L2.obj");
     //Model ourModel("Sour Miku - Blue&Red/test/White.pmx");
     //Model ourModel("backpack/backpack.obj");
@@ -156,7 +163,7 @@ int main()
     };
     //===================================
 
-    glm::vec3 cubePositions[] = 
+    glm::vec3 cubePositions[] =
     {
        glm::vec3(0.0f,  0.0f,  0.0f),
        glm::vec3(2.0f,  5.0f, -15.0f),
@@ -172,7 +179,7 @@ int main()
 
     glm::vec3 pointLightPositions[] =
     {
-        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(0.7f,  0.2f,  2.0f),
         glm::vec3(2.3f, -3.3f, -4.0f),
         glm::vec3(-4.0f,  2.0f, -12.0f),
         glm::vec3(0.0f,  0.0f, -3.0f)
@@ -204,13 +211,13 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    
+
     unsigned int diffuseMap = loadTexture("texture/container2.png");
 
     //============
     lightingShader.use();
     lightingShader.setInt("material.diffuse", 0);
-    
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -271,7 +278,7 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
-        
+
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
 
@@ -282,8 +289,6 @@ int main()
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 3.0f, 0.5f));
-            model = glm::scale(model, glm::vec3(2.0f));
-
             lightingShader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -300,31 +305,33 @@ int main()
         {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, pointLightPositions[i]);
-            model = glm::scale(model, glm::vec3(1.0f));
+            model = glm::scale(model, glm::vec3(0.2f));
             lightCubeShader.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
         ourShader.use();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
         glm::mat4 model = glm::mat4(1.0);
-        model = glm::translate(model, glm::vec3(0.0f ,-0.5f ,0.0f));
-        model = glm::rotate(model, (float)glfwGetTime()* glm::radians(180.0f),glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
+        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
         //model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
         ourShader.setMat4("model", model);
         ourShader.setFloat("Color", glfwGetTime());
-        //ourModel.Draw(ourShader);
-        
+        ourModel.Draw(ourShader);
 
-        text.Draw(shader,"This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        text.Draw(shader, (camera.Position.x)  , 400.0f, 300.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        text.Draw(shader, (camera.Position.y)  , 400.0f, 250.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        text.Draw(shader, (camera.Position.z)  , 400.0f, 200.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+
+        text.Draw(shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        text.Draw(shader, (camera.Position.x), 400.0f, 300.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        text.Draw(shader, (camera.Position.y), 400.0f, 250.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        text.Draw(shader, (camera.Position.z), 400.0f, 200.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+
+        text.Draw(shader, "WASD Key is Camera Movement", 100.0f, 400.0f, 1.0f, glm::vec3(0.5, 1, 1));
+        text.Draw(shader, "Mouse is Camerta rotation", 100.0f, 450.0f, 1.0f, glm::vec3(0.5, 1, 1));
 
         gametime.DeltaTime_Update();
         glfwSwapBuffers(window);
@@ -343,98 +350,103 @@ int main()
 }
 
 
-//CallBack function============================================
+//CallBack
 //============================================
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	glViewport(0, 0, width, height);
+    glViewport(0, 0, width, height);
 }
 
 void key_callback(GLFWwindow* window, int key, int scencode, int action, int mods)
 {
-	float CameraSpeed = 5.0f;
+    float CameraSpeed = 5.0f;
 
-	//cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
-	switch (key)
-	{
-	case GLFW_KEY_ESCAPE:
-		glfwSetWindowShouldClose(window, true);
-		break;
-	case GLFW_KEY_UP:
-		mixValue += 0.1f;
-		break;
-	case GLFW_KEY_DOWN:
-		mixValue -= 0.1f;
-		break;
-		//=====================
-		//Camera movement input
-	case GLFW_KEY_W:
-		//cameraPos += CameraSpeed * cameraFront * gametime.GetDeltaTime();
-		camera.ProcessKeyboard(FORWARD, gametime.GetDeltaTime());
-		break;
-	case GLFW_KEY_S:
-		//cameraPos -= CameraSpeed * cameraFront * gametime.GetDeltaTime();
-		camera.ProcessKeyboard(BACKWARD, gametime.GetDeltaTime());
-		break;
-	case GLFW_KEY_A:
-		//cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * gametime.GetDeltaTime();
-		camera.ProcessKeyboard(LEFT, gametime.GetDeltaTime());
+    //cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
+    switch (key)
+    {
+    case GLFW_KEY_ESCAPE:
+        glfwSetWindowShouldClose(window, true);
         break;
-	case GLFW_KEY_D:
-		//cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * gametime.GetDeltaTime();
-		camera.ProcessKeyboard(RIGHT, gametime.GetDeltaTime());
+    case GLFW_KEY_UP:
+        mixValue += 0.1f;
         break;
-		//=====================
+    case GLFW_KEY_DOWN:
+        mixValue -= 0.1f;
+        break;
+        //=====================
+        //Camera movement input
+    case GLFW_KEY_W:
+        //cameraPos += CameraSpeed * cameraFront * gametime.GetDeltaTime();
+        camera.ProcessKeyboard(FORWARD, gametime.GetDeltaTime());
+        break;
+    case GLFW_KEY_S:
+        //cameraPos -= CameraSpeed * cameraFront * gametime.GetDeltaTime();
+        camera.ProcessKeyboard(BACKWARD, gametime.GetDeltaTime());
+        break;
+    case GLFW_KEY_A:
+        //cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * gametime.GetDeltaTime();
+        camera.ProcessKeyboard(LEFT, gametime.GetDeltaTime());
+        break;
+    case GLFW_KEY_D:
+        //cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * gametime.GetDeltaTime();
+        camera.ProcessKeyboard(RIGHT, gametime.GetDeltaTime());
+        break;
+        //=====================
     case GLFW_KEY_R:
-        camera.Position = glm::vec3(0,0,0);
-    
+        camera.Position = glm::vec3(0, 0, 0);
+
     default:
-		cout << "Pressed default Key " << endl;
-		break;
-	}
+        cout << "Pressed default Key " << endl;
+        break;
+    }
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	//cout << "Mouse Position (" << xpos << "," << ypos << ")" << endl;
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
+    //cout << "Mouse Position (" << xpos << "," << ypos << ")" << endl;
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
 
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos;
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
 
-	lastX = xpos;
-	lastY = ypos;
+    lastX = xpos;
+    lastY = ypos;
 
-	camera.ProcessMouseMovement(xoffset, yoffset);
+    camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	//zoom += yoffset;
-	camera.ProcessMouseScroll(yoffset);
-	//cout << "Mouse Scroll Offset (" << xoffset << "," << yoffset << ")" << endl;
+    //zoom += yoffset;
+    camera.ProcessMouseScroll(yoffset);
+    //cout << "Mouse Scroll Offset (" << xoffset << "," << yoffset << ")" << endl;
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-	//if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-	//{
-	//	cout << "Mouse Clicked right button" << endl;
-	//}
+    //if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+    //{
+    //	cout << "Mouse Clicked right button" << endl;
+    //}
 
-	//if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-	//{
-	//	cout << "Mouse Clicked right left" << endl;
-	//}
+    //if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    //{
+    //	cout << "Mouse Clicked right left" << endl;
+    //}
 
 
 }
 
+/// <summary>
+/// image file Loard (test)
+/// </summary>
+/// <param name="path"></param>
+/// <returns></returns>
 unsigned int loadTexture(char const* path)
 {
     unsigned int textureID;
@@ -480,3 +492,4 @@ unsigned int loadTexture(char const* path)
     }
     return textureID;
 }
+
